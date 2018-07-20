@@ -38,7 +38,7 @@ foreach($server in $servers)  {
 				$disk.VolumeName,
 				[Math]::Round(($disk.Size / 1073741824), 2),
 				[Math]::Round(($disk.FreeSpace / 1073741824), 2),
-				[Math]::Round((100.0 * $disk.FreeSpace / $disk.Size), 1),
+				[Math]::Round((100.0 * $disk.FreeSpace / $disk.Size), 1)
 			)
 			$body += getHtmlTableRow -rowData $data;
 			$body += "</table>`n";
