@@ -4,14 +4,16 @@
 [string] $smtpServer  = "smtp.mail.com";
 [string] $sender = "sender@mail.com";
 [string] $receiver = "receiver@mail.com";
-[string] $subject = "Disk Usage Report";
+[string] $subject = "Weekly Disk Usage Report (Under 5 GB Free)";
 [string] $body = [String]::Empty;
+
+$body += "<head><title>Disk usage report</title></head><body>"; 
 
 function getHtmlTableHeader {
 	[String] $header = [String]::Empty; 
 	$header += "<table><tr> 
-		<th>Drive</th> 
-		<th>Volume Name</th> 
+		<th>Drv</th> 
+		<th>Vol Name</th> 
 		<th>Free GB</th></tr>"; 
 	return $header; 
 }
@@ -26,7 +28,6 @@ function getHtmlTableRow {
 	return $textRow; 
 }
 
-$body += "<head><title>Disk usage report</title></head><body>"; 
 foreach($server in $servers)  {
 	$disks = Get-WmiObject -ComputerName $server -Class Win32_LogicalDisk -Filter "DriveType = 3";
 	foreach ($disk in $disks) {
@@ -47,7 +48,7 @@ foreach($server in $servers)  {
 }
 $body += "</body>";
 
-# Init Mail
+# Init Mail address objects 
 $smtpClient = New-Object Net.Mail.SmtpClient($smtpServer);
 $emailFrom  = New-Object Net.Mail.MailAddress $sender, $sender;
 $emailTo = New-Object Net.Mail.MailAddress $receiver , $receiver;
